@@ -1,0 +1,59 @@
+package br.com.booking_ms.model;
+
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "bookings")
+public class Booking {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long bookingId;
+
+    @Column(name = "customer_id", nullable = false)
+    private Long customerId;
+
+    @Column(name = "barber_id", nullable = false)
+    private Long barberId;
+
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+
+    @ManyToMany
+    @JoinTable(
+            name = "booking_services",
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+    private List<BarberServices> services = new ArrayList<>();
+
+    public Booking() {}
+
+    public Long getBookingId() {return bookingId;}
+
+    public void setBookingId(Long bookingId) {this.bookingId = bookingId;}
+
+    public Long getCustomerId() {return customerId;}
+
+    public void setCustomerId(Long customerId) {this.customerId = customerId;}
+
+    public Long getBarberId() {return barberId;}
+
+    public void setBarberId(Long barberId) {this.barberId = barberId;}
+
+    public LocalDateTime getStartTime() {return startTime;}
+
+    public void setStartTime(LocalDateTime startTime) {this.startTime = startTime;}
+
+    public LocalDateTime getEndTime() {return endTime;}
+
+    public void setEndTime(LocalDateTime endTime) {this.endTime = endTime;}
+
+    public List<BarberServices> getServices() {return services;}
+
+    public void setServices(List<BarberServices> services) {this.services = services;}
+}
