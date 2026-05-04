@@ -14,7 +14,7 @@ public class BarberServices {
 
     private String name;
     private BigDecimal price;
-    private Integer durationMinutes;
+    private int durationMinutes;
 
     public BarberServices() {}
 
@@ -30,7 +30,7 @@ public class BarberServices {
 
     public void setPrice(BigDecimal price) {this.price = price;}
 
-    public Integer getDurationMinutes() {return durationMinutes;}
+    public int getDurationMinutes() {return durationMinutes;}
 
-    public void setDurationMinutes(Integer durationMinutes) {this.durationMinutes = durationMinutes;}
+    public void setDurationMinutes(int durationMinutes) {this.durationMinutes = durationMinutes;}
 }
