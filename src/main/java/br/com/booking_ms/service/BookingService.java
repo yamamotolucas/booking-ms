@@ -6,6 +6,7 @@ import br.com.booking_ms.model.BarberServices;
 import br.com.booking_ms.model.Booking;
 import br.com.booking_ms.repository.BarberServicesRepository;
 import br.com.booking_ms.repository.BookingRepository;
+import br.com.booking_ms.validation.BookingCreationValidator;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -16,10 +17,12 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final BarberServicesRepository barberServicesRepository;
+    private final List<BookingCreationValidator> validations;
 
-    public BookingService(BookingRepository bookingRepository, BarberServicesRepository barberServicesRepository) {
+    public BookingService(BookingRepository bookingRepository, BarberServicesRepository barberServicesRepository, List<BookingCreationValidator> validations) {
         this.bookingRepository = bookingRepository;
         this.barberServicesRepository = barberServicesRepository;
+        this.validations = validations;
     }
 
     @Transactional
@@ -44,6 +47,8 @@ public class BookingService {
         booking.setStartTime(startTime);
         booking.setEndTime(endTime);
         booking.setServices(services);
+
+        validations.forEach(validator -> validator.validate(booking));
 
         return new BookingCreateOutput(bookingRepository.save(booking));
 
