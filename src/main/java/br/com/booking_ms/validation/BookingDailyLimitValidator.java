@@ -6,7 +6,6 @@ import jakarta.validation.ValidationException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 @Component
 public class BookingDailyLimitValidator implements BookingCreationValidator{
