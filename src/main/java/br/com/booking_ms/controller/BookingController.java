@@ -1,14 +1,17 @@
 package br.com.booking_ms.controller;
 
+import br.com.booking_ms.dto.input.AvailabilityInput;
 import br.com.booking_ms.dto.input.BookingCreateInput;
 import br.com.booking_ms.dto.output.BookingCreateOutput;
 import br.com.booking_ms.service.BookingService;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.core.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/bookings")
@@ -37,6 +40,10 @@ public class BookingController {
 
     }
 
+    @GetMapping("/availability")
+    public ResponseEntity<List<String>> getAvailability(@RequestBody @Valid AvailabilityInput input) {
+        return ResponseEntity.ok().body(bookingService.getAvaliableDays(input));
+    }
 
     @GetMapping("/test-headers")
     public String testHeaders(@RequestHeader("X-User-Id") String userId,
