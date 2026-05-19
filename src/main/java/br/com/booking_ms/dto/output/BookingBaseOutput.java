@@ -13,7 +13,8 @@ public record BookingBaseOutput(
         Long barberId,
         LocalDateTime startTime,
         LocalDateTime endTime,
-        List<ServicesDto> services
+        List<ServicesDto> services,
+        BookingStatus bookingStatus
 
 ) {
     public BookingBaseOutput(Booking booking) {
@@ -28,7 +29,8 @@ public record BookingBaseOutput(
                                 m.getName(),
                                 m.getPrice()
                         ))
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                booking.getBookingStatus()
         );
     }
 }
