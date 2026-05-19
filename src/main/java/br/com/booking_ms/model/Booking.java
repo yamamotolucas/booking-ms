@@ -23,6 +23,10 @@ public class Booking {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
+    @Column(name = "booking_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BookingStatus bookingStatus;
+
     @ManyToMany
     @JoinTable(
             name = "booking_services",
@@ -56,4 +60,8 @@ public class Booking {
     public List<BarberServices> getServices() {return services;}
 
     public void setServices(List<BarberServices> services) {this.services = services;}
+
+    public BookingStatus getBookingStatus() {return bookingStatus;}
+
+    public void setBookingStatus(BookingStatus bookingStatus) {this.bookingStatus = bookingStatus;}
 }

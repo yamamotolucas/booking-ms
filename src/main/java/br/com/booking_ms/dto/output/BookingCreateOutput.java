@@ -4,6 +4,7 @@ package br.com.booking_ms.dto.output;
 import br.com.booking_ms.dto.ServicesDto;
 import br.com.booking_ms.model.BarberServices;
 import br.com.booking_ms.model.Booking;
+import br.com.booking_ms.model.BookingStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +17,8 @@ public record BookingCreateOutput(
         Long barberId,
         LocalDateTime startTime,
         LocalDateTime endTime,
-        List<ServicesDto> services
+        List<ServicesDto> services,
+        BookingStatus bookingStatus
 
 ) {
     public BookingCreateOutput(Booking booking) {
@@ -32,7 +34,8 @@ public record BookingCreateOutput(
                                 m.getName(),
                                 m.getPrice()
                         ))
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                booking.getBookingStatus()
         );
     }
 }

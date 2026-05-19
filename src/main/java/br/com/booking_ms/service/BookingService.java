@@ -5,6 +5,7 @@ import br.com.booking_ms.dto.input.BookingCreateInput;
 import br.com.booking_ms.dto.output.BookingCreateOutput;
 import br.com.booking_ms.model.BarberServices;
 import br.com.booking_ms.model.Booking;
+import br.com.booking_ms.model.BookingStatus;
 import br.com.booking_ms.repository.BarberServicesRepository;
 import br.com.booking_ms.repository.BookingRepository;
 import br.com.booking_ms.validation.BookingCreationValidator;
@@ -69,9 +70,9 @@ public class BookingService {
         booking.setStartTime(startTime);
         booking.setEndTime(endTime);
         booking.setServices(services);
+        booking.setBookingStatus(BookingStatus.CONFIRMED);
 
         validations.forEach(validator -> validator.validate(booking));
-
         return new BookingCreateOutput(bookingRepository.save(booking));
 
     }
