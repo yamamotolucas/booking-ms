@@ -21,4 +21,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Query("SELECT b FROM Booking b WHERE b.barberId = :barberId AND CAST(b.startTime AS date) = :date")
     List<Booking> findByBarberIdAndDate(@Param("barberId") Long barberId, @Param("date") LocalDate date);
+
+    List<Booking> findByCustomerId(Long customerId);
 }

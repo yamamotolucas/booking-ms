@@ -2,6 +2,7 @@ package br.com.booking_ms.service;
 
 import br.com.booking_ms.dto.input.AvailabilityInput;
 import br.com.booking_ms.dto.input.BookingCreateInput;
+import br.com.booking_ms.dto.output.BookingBaseOutput;
 import br.com.booking_ms.dto.output.BookingCreateOutput;
 import br.com.booking_ms.model.BarberServices;
 import br.com.booking_ms.model.Booking;
@@ -20,6 +21,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -109,6 +111,15 @@ public class BookingService {
         }
 
         return avaliable;
+    }
+
+    public List<BookingBaseOutput> getBookings(String customerId) {
+
+        List<Booking> bookings = bookingRepository.findByCustomerId(Long.parseLong(customerId));
+        if(bookings.isEmpty())
+            throw new RuntimeException("No bookings found");
+
+        return bookings.stream().map(BookingBaseOutput::new).collect(Collectors.toList());
     }
 
 }

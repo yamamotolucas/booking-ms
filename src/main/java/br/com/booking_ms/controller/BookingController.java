@@ -2,7 +2,9 @@ package br.com.booking_ms.controller;
 
 import br.com.booking_ms.dto.input.AvailabilityInput;
 import br.com.booking_ms.dto.input.BookingCreateInput;
+import br.com.booking_ms.dto.output.BookingBaseOutput;
 import br.com.booking_ms.dto.output.BookingCreateOutput;
+import br.com.booking_ms.model.Booking;
 import br.com.booking_ms.service.BookingService;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.core.Response;
@@ -43,6 +45,11 @@ public class BookingController {
     @GetMapping("/availability")
     public ResponseEntity<List<String>> getAvailability(@RequestBody @Valid AvailabilityInput input) {
         return ResponseEntity.ok().body(bookingService.getAvaliableDays(input));
+    }
+
+    @GetMapping("/myBookings")
+    public ResponseEntity<List<BookingBaseOutput>> getMyBookings(@RequestHeader("X-User-Id") String customerId) {
+        return ResponseEntity.ok().body(bookingService.getBookings(customerId));
     }
 
     @GetMapping("/test-headers")
