@@ -13,13 +13,13 @@ import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    @Query("SELECT (COUNT(b) > 0) FROM Booking b WHERE CAST(b.startTime AS date) = :date AND b.customerId = :customerId")
+    @Query("SELECT (COUNT(b) > 0) FROM Booking b WHERE CAST(b.startTime AS date) = :date AND b.customerId = :customerId AND b.bookingStatus = 'CONFIRMED'")
     boolean existsByDateAndCustomerId(@Param("date") LocalDate date, @Param("customerId") Long customerId);
 
-    @Query("SELECT (COUNT(b) > 0) FROM Booking b WHERE b.startTime < :endTime AND b.endTime > :startTime")
+    @Query("SELECT (COUNT(b) > 0) FROM Booking b WHERE b.startTime < :endTime AND b.endTime > :startTime AND b.bookingStatus = 'CONFIRMED'")
     boolean existsByDateAndStartTime(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
 
-    @Query("SELECT b FROM Booking b WHERE b.barberId = :barberId AND CAST(b.startTime AS date) = :date")
+    @Query("SELECT b FROM Booking b WHERE b.barberId = :barberId AND CAST(b.startTime AS date) = :date AND b.bookingStatus = 'CONFIRMED'")
     List<Booking> findByBarberIdAndDate(@Param("barberId") Long barberId, @Param("date") LocalDate date);
 
     List<Booking> findByCustomerId(Long customerId);

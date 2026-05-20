@@ -137,6 +137,5 @@ public class BookingService {
         return new BookingBaseOutput(bookingRepository.save(booking));
     }
 
-    //validar status nos validadores de agendamento e adicionar na query para obter horarios disponiveis corretamente.
 
 }
