@@ -23,4 +23,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByBarberIdAndDate(@Param("barberId") Long barberId, @Param("date") LocalDate date);
 
     List<Booking> findByCustomerId(Long customerId);
+
+    Optional<Booking> findByBookingIdAndCustomerId(Long bookingId, Long customerId);
 }

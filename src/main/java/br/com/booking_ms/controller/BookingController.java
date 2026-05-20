@@ -52,6 +52,11 @@ public class BookingController {
         return ResponseEntity.ok().body(bookingService.getBookings(customerId));
     }
 
+    @PatchMapping("/cancel/{bookingId}")
+    public ResponseEntity<BookingBaseOutput> cancelBooking(@PathVariable String bookingId, @RequestHeader("X-User-Id") String customerId) {
+        return ResponseEntity.ok().body(bookingService.cancelBooking(bookingId, customerId));
+    }
+
     @GetMapping("/test-headers")
     public String testHeaders(@RequestHeader("X-User-Id") String userId,
                               @RequestHeader("X-User-Email") String email,

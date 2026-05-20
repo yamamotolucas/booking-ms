@@ -10,6 +10,7 @@ import br.com.booking_ms.model.BookingStatus;
 import br.com.booking_ms.repository.BarberServicesRepository;
 import br.com.booking_ms.repository.BookingRepository;
 import br.com.booking_ms.validation.BookingCreationValidator;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -121,5 +123,20 @@ public class BookingService {
 
         return bookings.stream().map(BookingBaseOutput::new).collect(Collectors.toList());
     }
+
+    @Transactional
+    public BookingBaseOutput cancelBooking(String bookingId, String customerId) {
+
+        Long idBooking = Long.parseLong(bookingId);
+        Long idCustomer = Long.parseLong(customerId);
+
+        Booking booking = bookingRepository.findByBookingIdAndCustomerId(idBooking, idCustomer)
+                .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+
+        booking.setBookingStatus(BookingStatus.CANCELLED);
+        return new BookingBaseOutput(bookingRepository.save(booking));
+    }
+
+    //validar status nos validadores de agendamento e adicionar na query para obter horarios disponiveis corretamente.
 
 }
