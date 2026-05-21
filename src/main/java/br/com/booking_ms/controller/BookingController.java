@@ -35,7 +35,7 @@ public class BookingController {
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(booking)
+                .buildAndExpand(booking.bookingId())
                 .toUri();
 
         return ResponseEntity.created(uri).body(booking);

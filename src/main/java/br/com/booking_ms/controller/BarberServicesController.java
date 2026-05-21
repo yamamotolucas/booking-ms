@@ -29,7 +29,7 @@ public class BarberServicesController {
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(output)
+                .buildAndExpand(output.id())
                 .toUri();
 
         return ResponseEntity.created(uri).body(output);
