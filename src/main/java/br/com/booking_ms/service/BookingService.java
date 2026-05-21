@@ -137,5 +137,31 @@ public class BookingService {
         return new BookingBaseOutput(bookingRepository.save(booking));
     }
 
+    @Transactional
+    public BookingBaseOutput confirmBooking(String bookingId, String customerId) {
+
+        Long idBooking = Long.parseLong(bookingId);
+        Long idCustomer = Long.parseLong(customerId);
+
+        Booking booking = bookingRepository.findByBookingIdAndCustomerId(idBooking, idCustomer)
+                .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+
+        booking.setBookingStatus(BookingStatus.CONFIRMED);
+        return new BookingBaseOutput(bookingRepository.save(booking));
+    }
+
+    @Transactional
+    public BookingBaseOutput completeBooking(String bookingId, String customerId) {
+
+        Long idBooking = Long.parseLong(bookingId);
+        Long idCustomer = Long.parseLong(customerId);
+
+        Booking booking = bookingRepository.findByBookingIdAndCustomerId(idBooking, idCustomer)
+                .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+
+        booking.setBookingStatus(BookingStatus.COMPLETED);
+        return new BookingBaseOutput(bookingRepository.save(booking));
+    }
+
 
 }
