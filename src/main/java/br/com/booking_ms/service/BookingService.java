@@ -7,6 +7,7 @@ import br.com.booking_ms.dto.output.BookingCreateOutput;
 import br.com.booking_ms.model.BarberServices;
 import br.com.booking_ms.model.Booking;
 import br.com.booking_ms.model.BookingStatus;
+import br.com.booking_ms.producer.BookingProducer;
 import br.com.booking_ms.repository.BarberServicesRepository;
 import br.com.booking_ms.repository.BookingRepository;
 import br.com.booking_ms.validation.BookingCreationValidator;
@@ -31,11 +32,13 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final BarberServicesRepository barberServicesRepository;
     private final List<BookingCreationValidator> validations;
+    private final BookingProducer bookingProducer;
 
-    public BookingService(BookingRepository bookingRepository, BarberServicesRepository barberServicesRepository, List<BookingCreationValidator> validations) {
+    public BookingService(BookingRepository bookingRepository, BarberServicesRepository barberServicesRepository, List<BookingCreationValidator> validations, BookingProducer bookingProducer) {
         this.bookingRepository = bookingRepository;
         this.barberServicesRepository = barberServicesRepository;
         this.validations = validations;
+        this.bookingProducer = bookingProducer;
     }
 
     public int calculateDuration(List<BarberServices> services){
@@ -77,7 +80,17 @@ public class BookingService {
         booking.setBookingStatus(BookingStatus.CONFIRMED);
 
         validations.forEach(validator -> validator.validate(booking));
-        return new BookingCreateOutput(bookingRepository.save(booking));
+
+        Booking savedBooking = bookingRepository.save(booking);
+        BookingCreateOutput output = new BookingCreateOutput(savedBooking);
+
+        try {
+            bookingProducer.sendPendingBooking(output);
+        } catch (Exception e) {
+            System.err.println("❌ FALHA AO ENVIAR EVENTO PARA O RABBITMQ: " + e.getMessage());
+        }
+
+        return output;
 
     }
 
