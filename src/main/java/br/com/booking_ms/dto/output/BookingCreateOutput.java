@@ -18,7 +18,8 @@ public record BookingCreateOutput(
         LocalDateTime startTime,
         LocalDateTime endTime,
         List<ServicesDto> services,
-        BookingStatus bookingStatus
+        BookingStatus bookingStatus,
+        String confirmationToken
 
 ) {
     public BookingCreateOutput(Booking booking) {
@@ -35,7 +36,8 @@ public record BookingCreateOutput(
                                 m.getPrice()
                         ))
                         .collect(Collectors.toList()),
-                booking.getBookingStatus()
+                booking.getBookingStatus(),
+                booking.getConfirmationToken()
         );
     }
 }

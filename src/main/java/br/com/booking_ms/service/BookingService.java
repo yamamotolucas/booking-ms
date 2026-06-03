@@ -23,7 +23,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,7 +77,8 @@ public class BookingService {
         booking.setStartTime(startTime);
         booking.setEndTime(endTime);
         booking.setServices(services);
-        booking.setBookingStatus(BookingStatus.CONFIRMED);
+        booking.setBookingStatus(BookingStatus.PENDING);
+        booking.setConfirmationToken(UUID.randomUUID().toString());
 
         validations.forEach(validator -> validator.validate(booking));
 
@@ -151,13 +152,13 @@ public class BookingService {
     }
 
     @Transactional
-    public BookingBaseOutput confirmBooking(String bookingId, String customerId) {
+    public BookingBaseOutput confirmBooking(String confirmationToken) {
 
-        Long idBooking = Long.parseLong(bookingId);
-        Long idCustomer = Long.parseLong(customerId);
-
-        Booking booking = bookingRepository.findByBookingIdAndCustomerId(idBooking, idCustomer)
+        Booking booking = bookingRepository.findByConfirmationToken(confirmationToken)
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+
+        if(booking.getBookingStatus() == BookingStatus.CONFIRMED)
+            throw new RuntimeException("Booking is already confirmed!");
 
         booking.setBookingStatus(BookingStatus.CONFIRMED);
         return new BookingBaseOutput(bookingRepository.save(booking));

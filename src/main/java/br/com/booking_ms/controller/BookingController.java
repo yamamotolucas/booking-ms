@@ -57,9 +57,9 @@ public class BookingController {
         return ResponseEntity.ok().body(bookingService.cancelBooking(bookingId, customerId));
     }
 
-    @PatchMapping("/confirm/{bookingId}")
-    public ResponseEntity<BookingBaseOutput> confirmBooking(@PathVariable String bookingId, @RequestHeader("X-User-Id") String customerId) {
-        return ResponseEntity.ok().body(bookingService.confirmBooking(bookingId, customerId));
+    @GetMapping("/confirm/{confirmationToken}")
+    public ResponseEntity<BookingBaseOutput> confirmBooking(@PathVariable String confirmationToken) {
+        return ResponseEntity.ok().body(bookingService.confirmBooking(confirmationToken));
     }
 
     @PatchMapping("/complete/{bookingId}")
