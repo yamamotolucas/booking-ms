@@ -27,6 +27,9 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
 
+    @Column(name = "confirmation_token", nullable = false, unique = true)
+    private String confirmationToken;
+
     @ManyToMany
     @JoinTable(
             name = "booking_services",
@@ -64,4 +67,8 @@ public class Booking {
     public BookingStatus getBookingStatus() {return bookingStatus;}
 
     public void setBookingStatus(BookingStatus bookingStatus) {this.bookingStatus = bookingStatus;}
+
+    public String getConfirmationToken() {return confirmationToken;}
+
+    public void setConfirmationToken(String confirmationToken) {this.confirmationToken = confirmationToken;}
 }
