@@ -2,6 +2,7 @@ package br.com.booking_ms.dto.output;
 
 
 import br.com.booking_ms.dto.ServicesDto;
+import br.com.booking_ms.dto.input.CustomerInfo;
 import br.com.booking_ms.model.BarberServices;
 import br.com.booking_ms.model.Booking;
 import br.com.booking_ms.model.BookingStatus;
@@ -13,8 +14,8 @@ import java.util.stream.Collectors;
 public record BookingCreateOutput(
 
         Long bookingId,
-        Long customerId,
-        Long barberId,
+        String customerName,
+        String customerEmail,
         LocalDateTime startTime,
         LocalDateTime endTime,
         List<ServicesDto> services,
@@ -22,11 +23,11 @@ public record BookingCreateOutput(
         String confirmationToken
 
 ) {
-    public BookingCreateOutput(Booking booking) {
+    public BookingCreateOutput(Booking booking, CustomerInfo customer) {
         this (
                 booking.getBookingId(),
-                booking.getCustomerId(),
-                booking.getBarberId(),
+                customer.name(),
+                customer.email(),
                 booking.getStartTime(),
                 booking.getEndTime(),
                 booking.getServices()

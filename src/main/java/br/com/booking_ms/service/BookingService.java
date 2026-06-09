@@ -2,6 +2,7 @@ package br.com.booking_ms.service;
 
 import br.com.booking_ms.dto.input.AvailabilityInput;
 import br.com.booking_ms.dto.input.BookingCreateInput;
+import br.com.booking_ms.dto.input.CustomerInfo;
 import br.com.booking_ms.dto.output.BookingBaseOutput;
 import br.com.booking_ms.dto.output.BookingCreateOutput;
 import br.com.booking_ms.model.BarberServices;
@@ -62,8 +63,7 @@ public class BookingService {
     }
 
     @Transactional
-    public BookingCreateOutput create(BookingCreateInput input, String customerId) {
-
+    public BookingCreateOutput create(BookingCreateInput input, CustomerInfo customer) {
         Booking booking = new Booking();
 
         List<BarberServices> services = validateServices(input.services());
@@ -72,7 +72,7 @@ public class BookingService {
         LocalDateTime startTime = input.startTime();
         LocalDateTime endTime = startTime.plusMinutes(durationMinutes);
 
-        booking.setCustomerId(Long.parseLong(customerId));
+        booking.setCustomerId(customer.id());
         booking.setBarberId(input.barberId());
         booking.setStartTime(startTime);
         booking.setEndTime(endTime);
@@ -83,12 +83,12 @@ public class BookingService {
         validations.forEach(validator -> validator.validate(booking));
 
         Booking savedBooking = bookingRepository.save(booking);
-        BookingCreateOutput output = new BookingCreateOutput(savedBooking);
+        BookingCreateOutput output = new BookingCreateOutput(savedBooking, customer);
 
         try {
             bookingProducer.sendPendingBooking(output);
         } catch (Exception e) {
-            System.err.println("❌ FALHA AO ENVIAR EVENTO PARA O RABBITMQ: " + e.getMessage());
+            System.err.println("❌" + e.getMessage());
         }
 
         return output;

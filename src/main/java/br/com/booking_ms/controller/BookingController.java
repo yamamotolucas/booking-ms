@@ -2,6 +2,7 @@ package br.com.booking_ms.controller;
 
 import br.com.booking_ms.dto.input.AvailabilityInput;
 import br.com.booking_ms.dto.input.BookingCreateInput;
+import br.com.booking_ms.dto.input.CustomerInfo;
 import br.com.booking_ms.dto.output.BookingBaseOutput;
 import br.com.booking_ms.dto.output.BookingCreateOutput;
 import br.com.booking_ms.model.Booking;
@@ -28,10 +29,14 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<BookingCreateOutput> create(
             @RequestBody @Valid BookingCreateInput input,
-            @RequestHeader("X-User-Id") String customerId
+            @RequestHeader("X-User-Id") String customerId,
+            @RequestHeader("X-User-Email") String customerEmail,
+            @RequestHeader("X-User-Name") String customerName
     ) {
 
-        BookingCreateOutput booking = bookingService.create(input, customerId);
+        CustomerInfo customerInfo = new CustomerInfo(customerId, customerEmail, customerName);
+        BookingCreateOutput booking = bookingService.create(input, customerInfo);
+
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -71,7 +76,9 @@ public class BookingController {
     @GetMapping("/test-headers")
     public String testHeaders(@RequestHeader("X-User-Id") String userId,
                               @RequestHeader("X-User-Email") String email,
-                              @RequestHeader("X-User-Roles") String roles) {
-        return "User: " + userId + " Email:" + email + " Roles: " + roles;
+                              @RequestHeader("X-User-Roles") String roles,
+                              @RequestHeader("X-User-Name") String name,
+                              @RequestHeader("Authorization") String authorization) {
+        return "User: " + userId + "| Email:" + email + "| Roles: " + roles + "| Name: " + name + "| Authorization: " + authorization;
     }
 }
