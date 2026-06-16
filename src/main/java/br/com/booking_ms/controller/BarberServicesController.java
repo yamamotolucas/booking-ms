@@ -21,7 +21,7 @@ public class BarberServicesController {
         this.service = service;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<BarberServicesOutput> create(@RequestBody @Valid BarberServicesInput input) {
 
         BarberServicesOutput output = service.create(input);
@@ -35,7 +35,7 @@ public class BarberServicesController {
         return ResponseEntity.created(uri).body(output);
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<List<BarberServicesOutput>> findAllServices() {
         return ResponseEntity.ok().body(service.findAllServices());
     }
