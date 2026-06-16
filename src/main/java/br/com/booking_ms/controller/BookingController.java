@@ -47,7 +47,7 @@ public class BookingController {
 
     }
 
-    @GetMapping("/availability")
+    @PostMapping("/availability")
     public ResponseEntity<List<String>> getAvailability(@RequestBody @Valid AvailabilityInput input) {
         return ResponseEntity.ok().body(bookingService.getAvaliableDays(input));
     }
