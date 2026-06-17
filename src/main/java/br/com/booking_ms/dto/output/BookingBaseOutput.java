@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public record BookingBaseOutput(
-
+        Long bookingId,
         Long barberId,
         LocalDateTime startTime,
         LocalDateTime endTime,
@@ -19,7 +19,7 @@ public record BookingBaseOutput(
 ) {
     public BookingBaseOutput(Booking booking) {
         this (
-
+                booking.getBookingId(),
                 booking.getBarberId(),
                 booking.getStartTime(),
                 booking.getEndTime(),
