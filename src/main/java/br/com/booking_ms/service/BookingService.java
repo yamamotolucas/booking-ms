@@ -11,10 +11,14 @@ import br.com.booking_ms.model.BookingStatus;
 import br.com.booking_ms.producer.BookingProducer;
 import br.com.booking_ms.repository.BarberServicesRepository;
 import br.com.booking_ms.repository.BookingRepository;
+import br.com.booking_ms.specifications.BookingSpecification;
 import br.com.booking_ms.validation.BookingCreationValidator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -129,13 +133,45 @@ public class BookingService {
         return avaliable;
     }
 
-    public List<BookingBaseOutput> getBookings(String customerId) {
+    public Page<BookingBaseOutput> getBookings(
+            Long customerId,
+            String scope,
+            List<String> statuses,
+            Long barberId, Integer lastDays,
+            LocalDateTime startDate, LocalDateTime endDate,
+            Pageable pageable
+    ) {
 
-        List<Booking> bookings = bookingRepository.findByCustomerId(Long.parseLong(customerId));
-        if(bookings.isEmpty())
-            throw new RuntimeException("No bookings found");
+        Specification<Booking> spec = Specification.where(BookingSpecification.hasCustomerId(customerId));
+        LocalDateTime now = LocalDateTime.now();
 
-        return bookings.stream().map(BookingBaseOutput::new).collect(Collectors.toList());
+        if ("UPCOMING".equalsIgnoreCase(scope)) {
+            spec = spec.and(BookingSpecification.startTimeGreaterThanOrEqualTo(now));
+        } else if ("PAST".equalsIgnoreCase(scope)) {
+            spec = spec.and(BookingSpecification.startTimeLessThanOrEqualTo(now));
+        }
+
+        if (statuses != null && !statuses.isEmpty()) {
+            spec = spec.and(BookingSpecification.hasStatusIn(statuses));
+        }
+
+        if (barberId != null) {
+            spec = spec.and(BookingSpecification.hasBarberId(barberId));
+        }
+
+        if (lastDays != null) {
+            LocalDateTime startOfPeriod = now.minusDays(lastDays);
+            spec = spec.and(BookingSpecification.startTimeGreaterThanOrEqualTo(startOfPeriod));
+        }
+
+        if (startDate != null) {
+            spec = spec.and(BookingSpecification.startTimeGreaterThanOrEqualTo(startDate));
+        }
+        if (endDate != null) {
+            spec = spec.and(BookingSpecification.startTimeLessThanOrEqualTo(endDate));
+        }
+
+        return bookingRepository.findAll(spec, pageable).map(BookingBaseOutput::new);
     }
 
     @Transactional

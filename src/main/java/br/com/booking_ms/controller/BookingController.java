@@ -9,11 +9,16 @@ import br.com.booking_ms.model.Booking;
 import br.com.booking_ms.service.BookingService;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.core.Response;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -53,8 +58,21 @@ public class BookingController {
     }
 
     @GetMapping("/myBookings")
-    public ResponseEntity<List<BookingBaseOutput>> getMyBookings(@RequestHeader("X-User-Id") String customerId) {
-        return ResponseEntity.ok().body(bookingService.getBookings(customerId));
+    public ResponseEntity<Page<BookingBaseOutput>> getMyBookings(
+            @RequestHeader("X-User-Id") String customerId,
+            @RequestParam(required = false) String scope,
+            @RequestParam(required = false) List<String> statuses,
+            @RequestParam(required = false) Long barberId,
+            @RequestParam(required = false) Integer lastDays,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+            @PageableDefault(page = 0, size = 10) Pageable pageable) {
+
+        Page<BookingBaseOutput> bookings = bookingService.getBookings(
+                Long.parseLong(customerId), scope, statuses, barberId, lastDays, startDate, endDate, pageable
+        );
+
+        return ResponseEntity.ok().body(bookings);
     }
 
     @PatchMapping("/cancel/{bookingId}")

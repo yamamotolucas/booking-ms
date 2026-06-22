@@ -1,7 +1,10 @@
 package br.com.booking_ms.repository;
 
 import br.com.booking_ms.model.Booking;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -11,7 +14,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface BookingRepository extends JpaRepository<Booking, Long> {
+public interface BookingRepository extends JpaRepository<Booking, Long>, JpaSpecificationExecutor<Booking> {
 
     @Query("SELECT (COUNT(b) > 0) FROM Booking b WHERE CAST(b.startTime AS date) = :date AND b.customerId = :customerId AND (b.bookingStatus = 'CONFIRMED' OR b.bookingStatus = 'PENDING')")
     boolean existsByDateAndCustomerId(@Param("date") LocalDate date, @Param("customerId") Long customerId);
@@ -21,8 +24,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Query("SELECT b FROM Booking b WHERE b.barberId = :barberId AND CAST(b.startTime AS date) = :date AND (b.bookingStatus = 'CONFIRMED' OR b.bookingStatus = 'PENDING')")
     List<Booking> findByBarberIdAndDate(@Param("barberId") Long barberId, @Param("date") LocalDate date);
-
-    List<Booking> findByCustomerId(Long customerId);
 
     Optional<Booking> findByBookingIdAndCustomerId(Long bookingId, Long customerId);
 
