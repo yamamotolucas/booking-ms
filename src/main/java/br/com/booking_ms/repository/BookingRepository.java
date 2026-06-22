@@ -1,6 +1,7 @@
 package br.com.booking_ms.repository;
 
 import br.com.booking_ms.model.Booking;
+import br.com.booking_ms.model.BookingStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,4 +29,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, JpaSpec
     Optional<Booking> findByBookingIdAndCustomerId(Long bookingId, Long customerId);
 
     Optional<Booking> findByConfirmationToken(String confirmationToken);
+
+    Optional<Booking> findFirstByCustomerIdAndBookingStatusIn(Long customerId, List<BookingStatus> statuses);
 }
