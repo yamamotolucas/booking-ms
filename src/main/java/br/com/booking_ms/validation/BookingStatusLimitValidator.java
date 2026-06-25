@@ -6,6 +6,7 @@ import br.com.booking_ms.repository.BookingRepository;
 import jakarta.validation.ValidationException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -23,11 +24,11 @@ public class BookingStatusLimitValidator implements BookingCreationValidator {
         bookingRepository
         .findFirstByCustomerIdAndBookingStatusIn(booking.getCustomerId(), List.of(BookingStatus.PENDING, BookingStatus.CONFIRMED))
         .ifPresent(activeBooking -> {
-            if (activeBooking.getBookingStatus() == BookingStatus.PENDING) {
+            if (activeBooking.getBookingStatus() == BookingStatus.PENDING && activeBooking.getStartTime().isAfter(LocalDateTime.now())) {
                 throw new ValidationException("Customer already has a pending booking. Please confirm or cancel the other pending booking.");
             }
 
-            if (activeBooking.getBookingStatus() == BookingStatus.CONFIRMED) {
+            if (activeBooking.getBookingStatus() == BookingStatus.CONFIRMED && activeBooking.getStartTime().isAfter(LocalDateTime.now())) {
                 throw new ValidationException("Customer already has a confirmed booking.");
             }
         });
