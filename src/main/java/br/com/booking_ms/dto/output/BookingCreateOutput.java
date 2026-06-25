@@ -16,6 +16,7 @@ public record BookingCreateOutput(
         Long bookingId,
         String customerName,
         String customerEmail,
+        String barberName,
         LocalDateTime startTime,
         LocalDateTime endTime,
         List<ServicesDto> services,
@@ -28,6 +29,7 @@ public record BookingCreateOutput(
                 booking.getBookingId(),
                 customer.name(),
                 customer.email(),
+                booking.getBarberName(),
                 booking.getStartTime(),
                 booking.getEndTime(),
                 booking.getServices()
