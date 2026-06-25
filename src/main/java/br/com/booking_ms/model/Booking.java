@@ -30,6 +30,9 @@ public class Booking {
     @Column(name = "confirmation_token", nullable = false, unique = true)
     private String confirmationToken;
 
+    @Column(name = "barber_name")
+    private String barberName;
+
     @ManyToMany
     @JoinTable(
             name = "booking_services",
@@ -71,4 +74,8 @@ public class Booking {
     public String getConfirmationToken() {return confirmationToken;}
 
     public void setConfirmationToken(String confirmationToken) {this.confirmationToken = confirmationToken;}
+
+    public String getBarberName() {return barberName;}
+
+    public void setBarberName(String barberName) {this.barberName = barberName;}
 }

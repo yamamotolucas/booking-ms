@@ -1,5 +1,6 @@
 package br.com.booking_ms.service;
 
+import br.com.booking_ms.client.BarberClient;
 import br.com.booking_ms.dto.input.AvailabilityInput;
 import br.com.booking_ms.dto.input.BookingCreateInput;
 import br.com.booking_ms.dto.input.CustomerInfo;
@@ -13,6 +14,7 @@ import br.com.booking_ms.repository.BarberServicesRepository;
 import br.com.booking_ms.repository.BookingRepository;
 import br.com.booking_ms.specifications.BookingSpecification;
 import br.com.booking_ms.validation.BookingCreationValidator;
+import feign.FeignException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
@@ -29,7 +31,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -38,12 +39,21 @@ public class BookingService {
     private final BarberServicesRepository barberServicesRepository;
     private final List<BookingCreationValidator> validations;
     private final BookingProducer bookingProducer;
+    private final BarberClient barberClient;
 
-    public BookingService(BookingRepository bookingRepository, BarberServicesRepository barberServicesRepository, List<BookingCreationValidator> validations, BookingProducer bookingProducer) {
+    public BookingService
+    (
+            BookingRepository bookingRepository,
+            BarberServicesRepository barberServicesRepository,
+            List<BookingCreationValidator> validations,
+            BookingProducer bookingProducer,
+            BarberClient barberClient
+    ) {
         this.bookingRepository = bookingRepository;
         this.barberServicesRepository = barberServicesRepository;
         this.validations = validations;
         this.bookingProducer = bookingProducer;
+        this.barberClient = barberClient;
     }
 
     public int calculateDuration(List<BarberServices> services){
@@ -70,6 +80,7 @@ public class BookingService {
     public BookingCreateOutput create(BookingCreateInput input, CustomerInfo customer) {
         Booking booking = new Booking();
 
+        String barberName;
         List<BarberServices> services = validateServices(input.services());
         int durationMinutes = calculateDuration(services);
 
@@ -85,6 +96,10 @@ public class BookingService {
         booking.setConfirmationToken(UUID.randomUUID().toString());
 
         validations.forEach(validator -> validator.validate(booking));
+
+        barberName = barberClient.getBarberName(input.barberId().toString());
+        System.out.println(barberName);
+        booking.setBarberName(barberName);
 
         Booking savedBooking = bookingRepository.save(booking);
         BookingCreateOutput output = new BookingCreateOutput(savedBooking, customer);
