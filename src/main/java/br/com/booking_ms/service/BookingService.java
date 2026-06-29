@@ -163,7 +163,7 @@ public class BookingService {
         if ("UPCOMING".equalsIgnoreCase(scope)) {
             spec = spec.and(BookingSpecification.startTimeGreaterThanOrEqualTo(now));
         } else if ("PAST".equalsIgnoreCase(scope)) {
-            spec = spec.and(BookingSpecification.startTimeLessThanOrEqualTo(now));
+            spec = spec.and(BookingSpecification.isPastOrInactive(now));
         }
 
         if (statuses != null && !statuses.isEmpty()) {

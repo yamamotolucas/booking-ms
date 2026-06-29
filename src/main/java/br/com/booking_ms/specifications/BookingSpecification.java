@@ -1,6 +1,7 @@
 package br.com.booking_ms.specifications;
 
 import br.com.booking_ms.model.Booking;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,5 +26,13 @@ public class BookingSpecification {
 
     public static Specification<Booking> startTimeLessThanOrEqualTo(LocalDateTime end) {
         return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("startTime"), end);
+    }
+
+    public static Specification<Booking> isPastOrInactive(LocalDateTime now) {
+        return (root, query, cb) -> {
+            Predicate isPast = cb.lessThan(root.get("startTime"), now);
+            Predicate isInactiveStatus = root.get("bookingStatus").in("REJECTED", "CANCELLED");
+            return cb.or(isPast, isInactiveStatus);
+        };
     }
 }
