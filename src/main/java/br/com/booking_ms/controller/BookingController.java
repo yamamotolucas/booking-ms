@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.core.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -66,7 +67,7 @@ public class BookingController {
             @RequestParam(required = false) Integer lastDays,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
-            @PageableDefault(page = 0, size = 10) Pageable pageable) {
+            @PageableDefault(page = 0, size = 10, sort = "startTime", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<BookingBaseOutput> bookings = bookingService.getBookings(
                 Long.parseLong(customerId), scope, statuses, barberId, lastDays, startDate, endDate, pageable
