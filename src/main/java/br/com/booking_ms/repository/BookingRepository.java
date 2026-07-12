@@ -30,5 +30,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, JpaSpec
 
     Optional<Booking> findByConfirmationToken(String confirmationToken);
 
-    Optional<Booking> findFirstByCustomerIdAndBookingStatusIn(Long customerId, List<BookingStatus> statuses);
+    Optional<Booking> findFirstByCustomerIdAndBookingStatusInAndStartTimeAfter(Long customerId, List<BookingStatus> statuses, LocalDateTime now);
 }
