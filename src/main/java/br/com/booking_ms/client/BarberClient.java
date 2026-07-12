@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 )
 public interface BarberClient {
 
-    @GetMapping("/v1/barber/{id}")
+    @GetMapping("/v1/barber/findById/{id}")
     String getBarberName(@PathVariable("id") String id);
 
 }
