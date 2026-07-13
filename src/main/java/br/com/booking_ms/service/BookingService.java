@@ -78,9 +78,8 @@ public class BookingService {
 
     @Transactional
     public BookingCreateOutput create(BookingCreateInput input, CustomerInfo customer) {
-        Booking booking = new Booking();
 
-        String barberName;
+        Booking booking = new Booking();
         List<BarberServices> services = validateServices(input.services());
         int durationMinutes = calculateDuration(services);
 
@@ -97,20 +96,23 @@ public class BookingService {
 
         validations.forEach(validator -> validator.validate(booking));
 
-        barberName = barberClient.getBarberName(input.barberId().toString());
-        System.out.println(barberName);
-        booking.setBarberName(barberName);
+        booking.setBarberName(barberClient.getBarberName(input.barberId().toString()));
 
         Booking savedBooking = bookingRepository.save(booking);
         BookingCreateOutput output = new BookingCreateOutput(savedBooking, customer);
+        sendMessage(output);
+
+        return output;
+
+    }
+
+    public void sendMessage(BookingCreateOutput output) {
 
         try {
             bookingProducer.sendPendingBooking(output);
         } catch (Exception e) {
             System.err.println("❌" + e.getMessage());
         }
-
-        return output;
 
     }
 
