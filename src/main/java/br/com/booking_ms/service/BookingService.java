@@ -211,7 +211,10 @@ public class BookingService {
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
 
         if(booking.getBookingStatus() == BookingStatus.CONFIRMED)
-            throw new RuntimeException("Booking is already confirmed!");
+            throw new ValidationException("Booking is already confirmed!");
+
+        if(booking.getStartTime().isBefore(LocalDateTime.now()) || booking.getBookingStatus() != BookingStatus.PENDING)
+            throw new ValidationException("You cannot confirm this booking!");
 
         booking.setBookingStatus(BookingStatus.CONFIRMED);
         return new BookingBaseOutput(bookingRepository.save(booking));
