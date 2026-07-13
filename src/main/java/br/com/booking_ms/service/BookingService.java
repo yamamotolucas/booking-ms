@@ -176,7 +176,7 @@ public class BookingService {
 
         if (lastDays != null) {
             LocalDateTime startOfPeriod = now.minusDays(lastDays);
-            spec = spec.and(BookingSpecification.startTimeGreaterThanOrEqualTo(startOfPeriod));
+            spec = spec.and(BookingSpecification.lastDaysFilter(startOfPeriod));
         }
 
         if (startDate != null) {

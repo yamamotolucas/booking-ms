@@ -35,4 +35,9 @@ public class BookingSpecification {
             return cb.or(isPast, isInactiveStatus);
         };
     }
+
+    public static Specification<Booking> lastDaysFilter(LocalDateTime start) {
+        return (root, query, cb) -> cb.between(
+                root.get("startTime"), start, LocalDateTime.now());
+    }
 }
