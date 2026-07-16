@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public record BookingBaseOutput(
         Long bookingId,
         Long barberId,
+        String customerName,
         String barberName,
         LocalDateTime startTime,
         LocalDateTime endTime,
@@ -22,6 +23,7 @@ public record BookingBaseOutput(
         this (
                 booking.getBookingId(),
                 booking.getBarberId(),
+                booking.getCustomerName(),
                 booking.getBarberName(),
                 booking.getStartTime(),
                 booking.getEndTime(),

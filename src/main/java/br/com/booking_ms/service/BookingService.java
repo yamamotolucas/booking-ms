@@ -88,6 +88,7 @@ public class BookingService {
 
         booking.setCustomerId(customer.id());
         booking.setBarberId(input.barberId());
+        booking.setCustomerName(customer.name());
         booking.setStartTime(startTime);
         booking.setEndTime(endTime);
         booking.setServices(services);
