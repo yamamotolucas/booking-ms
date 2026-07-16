@@ -151,16 +151,21 @@ public class BookingService {
     }
 
     public Page<BookingBaseOutput> getBookings(
-            Long customerId,
+            Long userId,
             String scope,
             List<String> statuses,
-            Long barberId, Integer lastDays,
+            Integer lastDays,
             LocalDateTime startDate, LocalDateTime endDate,
+            boolean isBarber,
             Pageable pageable
     ) {
-
-        Specification<Booking> spec = Specification.where(BookingSpecification.hasCustomerId(customerId));
         LocalDateTime now = LocalDateTime.now();
+        Specification<Booking> spec = Specification.unrestricted();
+
+        if (!isBarber)
+            spec = spec.and(BookingSpecification.hasCustomerId(userId));
+        else
+            spec = spec.and(BookingSpecification.hasBarberId(userId));
 
         if ("UPCOMING".equalsIgnoreCase(scope)) {
             spec = spec.and(BookingSpecification.startTimeGreaterThanOrEqualTo(now));
@@ -170,10 +175,6 @@ public class BookingService {
 
         if (statuses != null && !statuses.isEmpty()) {
             spec = spec.and(BookingSpecification.hasStatusIn(statuses));
-        }
-
-        if (barberId != null) {
-            spec = spec.and(BookingSpecification.hasBarberId(barberId));
         }
 
         if (lastDays != null) {

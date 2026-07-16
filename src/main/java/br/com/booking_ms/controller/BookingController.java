@@ -60,21 +60,22 @@ public class BookingController {
 
     @GetMapping("/myBookings")
     public ResponseEntity<Page<BookingBaseOutput>> getMyBookings(
-            @RequestHeader("X-User-Id") String customerId,
+            @RequestHeader("X-User-Id") String userId,
             @RequestParam(required = false) String scope,
             @RequestParam(required = false) List<String> statuses,
-            @RequestParam(required = false) Long barberId,
             @RequestParam(required = false) Integer lastDays,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+            @RequestParam(required = false) boolean isBarber,
             @PageableDefault(page = 0, size = 10, sort = "startTime", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<BookingBaseOutput> bookings = bookingService.getBookings(
-                Long.parseLong(customerId), scope, statuses, barberId, lastDays, startDate, endDate, pageable
+                Long.parseLong(userId), scope, statuses, lastDays, startDate, endDate, isBarber, pageable
         );
 
         return ResponseEntity.ok().body(bookings);
     }
+    
 
     @PatchMapping("/cancel/{bookingId}")
     public ResponseEntity<BookingBaseOutput> cancelBooking(@PathVariable String bookingId, @RequestHeader("X-User-Id") String customerId) {
