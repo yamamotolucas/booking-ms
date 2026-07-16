@@ -33,6 +33,10 @@ public class Booking {
     @Column(name = "barber_name")
     private String barberName;
 
+
+    @Column(name = "customer_name")
+    private String customerName;
+
     @ManyToMany
     @JoinTable(
             name = "booking_services",
@@ -78,4 +82,9 @@ public class Booking {
     public String getBarberName() {return barberName;}
 
     public void setBarberName(String barberName) {this.barberName = barberName;}
+
+    public String getCustomerName() {return customerName;}
+
+    public void setCustomerName(String customerName) {this.customerName = customerName;}
+
 }
