@@ -223,12 +223,12 @@ public class BookingService {
     }
 
     @Transactional
-    public BookingBaseOutput completeBooking(String bookingId, String customerId) {
+    public BookingBaseOutput completeBooking(String bookingId, String barberId) {
 
         Long idBooking = Long.parseLong(bookingId);
-        Long idCustomer = Long.parseLong(customerId);
+        Long idBarber = Long.parseLong(barberId);
 
-        Booking booking = bookingRepository.findByBookingIdAndCustomerId(idBooking, idCustomer)
+        Booking booking = bookingRepository.findByBookingIdAndBarberId(idBooking, idBarber)
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
 
         booking.setBookingStatus(BookingStatus.COMPLETED);

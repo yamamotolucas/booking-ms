@@ -88,8 +88,8 @@ public class BookingController {
     }
 
     @PatchMapping("/complete/{bookingId}")
-    public ResponseEntity<BookingBaseOutput> completeBooking(@PathVariable String bookingId, @RequestHeader("X-User-Id") String customerId) {
-        return ResponseEntity.ok().body(bookingService.completeBooking(bookingId, customerId));
+    public ResponseEntity<BookingBaseOutput> completeBooking(@PathVariable String bookingId, @RequestHeader("X-User-Id") String barberId) {
+        return ResponseEntity.ok().body(bookingService.completeBooking(bookingId, barberId));
     }
 
 
