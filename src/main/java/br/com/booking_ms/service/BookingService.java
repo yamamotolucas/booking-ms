@@ -235,5 +235,10 @@ public class BookingService {
         return new BookingBaseOutput(bookingRepository.save(booking));
     }
 
-
+    @Transactional
+    public void bookingStatusSchedule() {
+        LocalDateTime initialTime = LocalDateTime.now().minusDays(60);
+        LocalDateTime finalTime = LocalDate.now().atStartOfDay();
+        bookingRepository.bookingStatusSchedule(initialTime, finalTime);
+    }
 }

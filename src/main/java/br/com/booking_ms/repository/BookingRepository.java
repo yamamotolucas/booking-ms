@@ -4,6 +4,7 @@ import br.com.booking_ms.model.Booking;
 import br.com.booking_ms.model.BookingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
@@ -29,4 +30,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, JpaSpec
     Optional<Booking> findFirstByCustomerIdAndBookingStatusInAndStartTimeAfter(Long customerId, List<BookingStatus> statuses, LocalDateTime now);
 
     Optional<Booking> findByBookingIdAndBarberId(Long bookingId, Long barberId);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Booking b SET b.bookingStatus = 'MISSED' WHERE b.bookingStatus in('PENDING', 'CONFIRMED') AND b.startTime BETWEEN :initialTime AND :finalTime")
+    void bookingStatusSchedule(
+            @Param("initialTime") LocalDateTime initialTime,
+            @Param("finalTime") LocalDateTime finalTime
+    );
 }
