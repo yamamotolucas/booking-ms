@@ -1,4 +1,4 @@
-package br.com.booking_ms.producer;
+package br.com.booking_ms.amqp.producer;
 
 import br.com.booking_ms.dto.output.BookingCreateOutput;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

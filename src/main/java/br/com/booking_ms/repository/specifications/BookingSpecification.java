@@ -1,4 +1,4 @@
-package br.com.booking_ms.specifications;
+package br.com.booking_ms.repository.specifications;
 
 import br.com.booking_ms.model.Booking;
 import jakarta.persistence.criteria.Predicate;
@@ -31,8 +31,16 @@ public class BookingSpecification {
     public static Specification<Booking> isPastOrInactive(LocalDateTime now) {
         return (root, query, cb) -> {
             Predicate isPast = cb.lessThan(root.get("startTime"), now);
-            Predicate isInactiveStatus = root.get("bookingStatus").in("REJECTED", "CANCELLED");
-            return cb.or(isPast, isInactiveStatus);
+            Predicate statusIn = root.get("bookingStatus").in("REJECTED", "CANCELLED", "MISSED", "COMPLETED");
+            return cb.or(isPast, statusIn);
+        };
+    }
+
+    public static Specification<Booking> isPastOrCompleted(LocalDateTime now) {
+        return (root, query, cb) -> {
+            Predicate isPast = cb.lessThan(root.get("startTime"), now);
+            Predicate isCompleted = root.get("bookingStatus").in("COMPLETED");
+            return cb.or(isPast, isCompleted);
         };
     }
 
