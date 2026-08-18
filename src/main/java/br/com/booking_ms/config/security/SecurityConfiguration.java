@@ -41,6 +41,9 @@ public class SecurityConfiguration {
                 )
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
 
+                        //SWAGGER
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger.yaml").permitAll()
+
                         // PUBLIC
                         .requestMatchers(HttpMethod.GET, "/v1/bookings/test-headers").permitAll()
 
