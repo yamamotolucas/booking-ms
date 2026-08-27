@@ -28,7 +28,7 @@ public class BarberServicesController {
         this.service = service;
     }
 
-    @Operation(summary = "Create a barber service", description = "Creates a new service offering for a barber and returns the created service details.")
+    @Operation(summary = "Create a barber service", description = "Creates a new service offering for a barber and returns the created service details. **Required role:** `ADMIN`")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Barber service created successfully"), @ApiResponse(responseCode = "400", description = "Invalid payload or service already exists", content = @Content)})
     @PostMapping("/create")
     public ResponseEntity<BarberServicesOutput> create(@RequestBody @Valid BarberServicesInput input) {

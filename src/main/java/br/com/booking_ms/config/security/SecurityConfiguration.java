@@ -54,10 +54,11 @@ public class SecurityConfiguration {
                         // BOOKINGS
                         .requestMatchers(HttpMethod.POST, "/v1/bookings/").hasRole("CUSTOMER")
                         .requestMatchers(HttpMethod.POST, "/v1/bookings/availability").hasAnyRole("ADMIN", "CUSTOMER", "BARBER")
-                        .requestMatchers(HttpMethod.GET, "/v1/bookings/myBookings").hasRole("CUSTOMER")
+                        .requestMatchers(HttpMethod.GET, "/v1/bookings/myBookings").hasAnyRole("CUSTOMER", "BARBER")
                         .requestMatchers(HttpMethod.PATCH, "/v1/bookings/cancel/*").hasRole("CUSTOMER")
                         .requestMatchers(HttpMethod.GET, "/v1/bookings/confirm/*").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/v1/bookings/complete/*").hasRole("BARBER")
+                        .requestMatchers(HttpMethod.GET, "/v1/bookings/test-headers").hasRole("ADMIN")
 
                         // TEST
                         .requestMatchers(HttpMethod.GET, "/test/barber").hasRole("BARBER")
