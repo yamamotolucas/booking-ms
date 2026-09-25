@@ -38,6 +38,20 @@ O **`booking-ms`** é o microsserviço responsável pelo ciclo de vida completo 
 
 ---
 
+## 🛠️ Stack & Tecnologias
+
+* **Linguagem & Framework:** Java 17 + Spring Boot 4.0.5 (Spring MVC)
+* **Ecossistema Cloud:** Spring Cloud 2025.1.1 (Eureka Client, OpenFeign, Resilience4j Circuit Breaker)
+* **Segurança & Tokens:** Spring Security + Auth0 Java JWT (v4.5.0)
+* **Persistência de Dados:** Spring Data JPA + Hibernate
+* **Migração e Versionamento:** Flyway Migration (`flyway-mysql`)
+* **Mensageria:** Spring AMQP (RabbitMQ)
+* **Validação:** Spring Boot Starter Validation (Bean Validation)
+* **Documentação de API:** SpringDoc OpenAPI 3 / Swagger UI (v2.8.5)
+* **Testes:** jUnit, Mockito
+
+---
+
 ## 🏗️ Arquitetura & Estrutura de Pastas
 
 O microsserviço adota uma arquitetura em camadas estruturada para suportar regras de negócio ricas e clientes externos:
