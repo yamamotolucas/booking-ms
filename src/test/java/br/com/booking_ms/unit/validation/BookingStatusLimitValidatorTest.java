@@ -1,8 +1,9 @@
-package br.com.booking_ms.validation;
+package br.com.booking_ms.unit.validation;
 
 import br.com.booking_ms.model.Booking;
 import br.com.booking_ms.model.BookingStatus;
 import br.com.booking_ms.repository.BookingRepository;
+import br.com.booking_ms.validation.BookingStatusLimitValidator;
 import jakarta.validation.ValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

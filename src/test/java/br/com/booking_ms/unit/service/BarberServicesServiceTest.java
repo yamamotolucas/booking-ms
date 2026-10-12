@@ -1,9 +1,10 @@
-package br.com.booking_ms.service;
+package br.com.booking_ms.unit.service;
 
 import br.com.booking_ms.dto.input.BarberServicesInput;
 import br.com.booking_ms.dto.output.BarberServicesOutput;
 import br.com.booking_ms.model.BarberServices;
 import br.com.booking_ms.repository.BarberServicesRepository;
+import br.com.booking_ms.service.BarberServicesService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

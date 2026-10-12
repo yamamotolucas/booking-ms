@@ -1,4 +1,4 @@
-package br.com.booking_ms.service;
+package br.com.booking_ms.unit.service;
 
 import br.com.booking_ms.amqp.producer.BookingProducer;
 import br.com.booking_ms.client.BarberClient;
@@ -12,6 +12,7 @@ import br.com.booking_ms.model.Booking;
 import br.com.booking_ms.model.BookingStatus;
 import br.com.booking_ms.repository.BarberServicesRepository;
 import br.com.booking_ms.repository.BookingRepository;
+import br.com.booking_ms.service.BookingService;
 import br.com.booking_ms.validation.BookingCreationValidator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
