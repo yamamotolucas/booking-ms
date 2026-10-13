@@ -15,12 +15,6 @@ import org.springframework.context.annotation.Configuration;
 public class BookingAMQPConfig {
 
     @Bean
-    public RabbitAdmin initRabbitAdmin(ConnectionFactory conn) {return new RabbitAdmin(conn);}
-
-    @Bean
-    public ApplicationListener<ApplicationReadyEvent> initAdmin(RabbitAdmin rabbitAdmin) {return event -> rabbitAdmin.initialize();}
-
-    @Bean
     public Queue createQueue() {return QueueBuilder.durable("pending.bookings").build();}
 
     @Bean
