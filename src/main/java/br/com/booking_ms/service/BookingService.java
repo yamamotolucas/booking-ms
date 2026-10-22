@@ -96,7 +96,12 @@ public class BookingService {
 
         validations.forEach(validator -> validator.validate(booking));
 
-        booking.setBarberName(barberClient.getBarberName(input.barberId().toString()));
+        try {
+            booking.setBarberName(barberClient.getBarberName(input.barberId().toString()));
+        } catch (Exception e) {
+            booking.setBarberName("");
+        }
+
 
         Booking savedBooking = bookingRepository.save(booking);
         BookingCreateOutput output = new BookingCreateOutput(savedBooking, customer);
